@@ -44,9 +44,10 @@ const Navicons = () => {
       </button>
 
       {/* Cart Icon */}
-      <div className='relative cursor-pointer'>
+      <div className='relative cursor-pointer'
+      onClick={() => setIsCartOpen((prev) => !prev)}
+      >
       <button
-        onClick={() => setIsCartOpen((prev) => !prev)}
         aria-label="Cart"
         className="h-6 w-6 text-gray-700 hover:text-green-500 md:h-7 md:w-7 relative">
         <ShoppingCartIcon />

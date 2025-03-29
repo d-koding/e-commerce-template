@@ -9,7 +9,11 @@ const nextConfig: NextConfig = {
         hostname: "images.pexels.com",
       },
     ]
-  }
+  },
+
+  env: {
+    APP_TITLE: "APP NAME",
+  },
 };
 
 export default nextConfig;
