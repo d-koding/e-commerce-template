@@ -1,5 +1,5 @@
 import Link from 'next/link'
-import React from 'react'
+import React, { Suspense } from 'react'
 import Menu from './Menu'
 import SearchBar from './SearchBar'
 import Navicons from './Navicons'
@@ -36,7 +36,9 @@ const NavBar = () => {
             </div>
             {/* RIGHT */}
             <div className='w-2/3 flex items-center justify-between gap-8'>
-                <SearchBar/>
+                <Suspense fallback="Loading...">
+                    <SearchBar/>
+                </Suspense>
                 <Navicons/>
             </div>
         </div>
