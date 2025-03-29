@@ -1,0 +1,80 @@
+'use client'
+
+import { FormEvent } from 'react'
+import { useRouter } from 'next/navigation'
+ 
+export default function LoginPage() {
+  const router = useRouter()
+ 
+  async function handleSubmit(event: FormEvent<HTMLFormElement>) {
+    event.preventDefault()
+ 
+    const formData = new FormData(event.currentTarget)
+    const email = formData.get('email')
+    const password = formData.get('password')
+ 
+    const response = await fetch('/api/auth/login', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email, password }),
+    })
+ 
+    if (response.ok) {
+      router.push('/profile')
+    } else {
+      // Handle errors
+    }
+  }
+ 
+  return (
+    <div className="min-h-screen bg-[#1a1f2b] flex items-center justify-center p-4">
+      <form
+        onSubmit={handleSubmit}
+        className="flex flex-col items-center w-full max-w-md p-5"
+      >
+        <h2 className="text-white text-2xl md:text-3xl font-bold mb-6">
+          Welcome to my Site!
+        </h2>
+
+        <input
+          type="email"
+          name="email"
+          placeholder="Email address"
+          required
+          className="w-full p-3 mb-4 bg-[#2a2f3b] border border-[#3a3f4b] rounded-lg text-white placeholder-white focus:outline-none focus:ring-2 focus:ring-primary"
+        />
+
+        <div className="w-full relative">
+          <input
+            type="password"
+            name="password"
+            placeholder="Password"
+            required
+            className="w-full p-3 mb-4 bg-[#2a2f3b] border border-[#3a3f4b] rounded-lg text-white placeholder-white focus:outline-none focus:ring-2 focus:ring-primary"
+          />
+          <a
+            href="#"
+            className="absolute right-3 top-3 text-primary text-sm hover:underline"
+          >
+            Forgot password?
+          </a>
+        </div>
+
+        <button
+          type="submit"
+          className="w-full p-3 bg-primary text-white rounded-lg hover:br-primary transition-colors"
+        >
+          Sign in
+        </button>
+
+        <p className="text-gray-400 text-sm mt-4">
+          Not a member?{' '}
+          <a href="#" className="text-primary hover:underline">
+            Start a 14 day free trial
+          </a>
+        </p>
+      </form>
+    </div>
+  )
+}
+
