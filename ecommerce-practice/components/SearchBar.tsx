@@ -32,7 +32,7 @@ const SearchBar = () => {
     </label>
 
     <input 
-    className="peer block w-1/2 rounded-md border border-gray-200 py-[9px] pl-10 text-sm outline-2 placeholder:text-gray-500"
+    className="peer block w-full rounded-md border border-gray-200 py-[9px] pl-10 text-sm outline-2 placeholder:text-gray-500"
     placeholder="search"
     defaultValue={searchParams.get('query')?.toString()}
     onChange={(e) => {
@@ -43,6 +43,7 @@ const SearchBar = () => {
         className="absolute left-3 top-1/2 h-5 w-5 -translate-y-1/2 text-gray-500 peer-focus:text-gray-900"
         aria-hidden="true"
       /> 
+    {isTyping && <span className="absolute right-3 top-1/2 -translate-y-1/2"></span>}
     </div>
   )
 };
