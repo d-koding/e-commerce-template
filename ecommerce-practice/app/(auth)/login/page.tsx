@@ -2,6 +2,7 @@
 
 import { FormEvent } from 'react'
 import { useRouter } from 'next/navigation'
+import Link from 'next/link'
  
 export default function LoginPage() {
   const router = useRouter()
@@ -20,7 +21,7 @@ export default function LoginPage() {
     })
  
     if (response.ok) {
-      router.push('/profile')
+      router.push('/')
     } else {
       // Handle errors
     }
@@ -52,12 +53,12 @@ export default function LoginPage() {
             required
             className="w-full p-3 mb-4 bg-[#2a2f3b] border border-[#3a3f4b] rounded-lg text-white placeholder-white focus:outline-none focus:ring-2 focus:ring-primary"
           />
-          <a
-            href="#"
+          <Link
+            href="/forgot-password"
             className="absolute right-3 top-3 text-primary text-sm hover:underline"
           >
             Forgot password?
-          </a>
+          </Link>
         </div>
 
         <button
@@ -69,10 +70,11 @@ export default function LoginPage() {
 
         <p className="text-gray-400 text-sm mt-4">
           Not a member?{' '}
-          <a href="#" className="text-primary hover:underline">
-            Start a 14 day free trial
-          </a>
+          <Link href="/register" className="text-primary hover:underline">
+            Register
+          </Link>
         </p>
+        
       </form>
     </div>
   )
