@@ -1,7 +1,7 @@
 // app/register/page.js
 "use client";
 import { useState, FormEvent } from "react";
-import { signup } from "@/app/(auth)/register/action";
+import { signup } from "@/app/actions/signup";
 
 export default function SignupForm() {
   const [error, setError] = useState<string | null>(null);

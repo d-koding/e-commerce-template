@@ -1,5 +1,5 @@
 'use client'
-
+import { login } from '@/app/actions/login'
 import { FormEvent } from 'react'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
@@ -11,20 +11,9 @@ export default function LoginPage() {
     event.preventDefault()
  
     const formData = new FormData(event.currentTarget)
-    const email = formData.get('email')
-    const password = formData.get('password')
+    
+    const result = await login(formData);
  
-    const response = await fetch('/api/auth/login', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ email, password }),
-    })
- 
-    if (response.ok) {
-      router.push('/')
-    } else {
-      // Handle errors
-    }
   }
  
   return (
@@ -34,7 +23,7 @@ export default function LoginPage() {
         className="flex flex-col items-center w-full max-w-md p-5"
       >
         <h2 className="text-white text-2xl md:text-3xl font-bold mb-6">
-          Welcome to my Site!
+          Welcome to my site!
         </h2>
 
         <input
