@@ -1,7 +1,29 @@
-"use server";
-import { createClient } from "@/utils/supabase/server/createClient";
-import { revalidatePath } from "next/cache";
-import { redirect } from "next/navigation";
+'use server'
+
+import { revalidatePath } from 'next/cache'
+import { redirect } from 'next/navigation'
+
+import { createClient } from '@/utils/supabase/server/createClient'
+
+export async function login(formData: FormData) {
+  const supabase = await createClient()
+
+  // type-casting here for convenience
+  // in practice, you should validate your inputs
+  const data = {
+    email: formData.get('email') as string,
+    password: formData.get('password') as string,
+  }
+
+  const { error } = await supabase.auth.signInWithPassword(data)
+
+  if (error) {
+    redirect('/error')
+  }
+
+  revalidatePath('/', 'layout')
+  redirect('/')
+}
 
 export async function signup(formData: FormData) {
     const supabase = await createClient();
@@ -36,9 +58,13 @@ export async function signup(formData: FormData) {
     const { error } = await supabase.auth.signUp(data);
   
     if (error) {
-      return { error: error.message };
-    }
+      return { 
+        status: error?.message,
+        use: null
+
+        }
+    } 
   
     revalidatePath("/", "layout");
-    redirect("/login?message=Registration successful! Please check your email to confirm.");
+    return {status: 'success', user: data.email}
   }

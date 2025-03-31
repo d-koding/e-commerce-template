@@ -1,18 +1,22 @@
 'use client'
-import { login } from '@/app/actions/login'
-import { FormEvent } from 'react'
+import { login } from '@/actions/auth'
+import { FormEvent, useState } from 'react'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
  
 export default function LoginPage() {
   const router = useRouter()
+  const [loading, setLoading] = useState(false)
  
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault()
+    setLoading(true)
  
     const formData = new FormData(event.currentTarget)
     
     const result = await login(formData);
+
+    setLoading(false)
  
   }
  
@@ -54,7 +58,7 @@ export default function LoginPage() {
           type="submit"
           className="w-full p-3 bg-primary text-white rounded-lg hover:br-primary transition-colors"
         >
-          Sign in
+          {loading ? "Signing in..." : "Sign In"}
         </button>
 
         <p className="text-gray-400 text-sm mt-4">
