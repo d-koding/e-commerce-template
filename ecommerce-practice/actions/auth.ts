@@ -1,28 +1,54 @@
 'use server'
 
 import { revalidatePath } from 'next/cache'
-import { redirect } from 'next/navigation'
-
 import { createClient } from '@/utils/supabase/server/createClient'
+import { redirect } from 'next/navigation'
 
 export async function login(formData: FormData) {
   const supabase = await createClient()
 
   // type-casting here for convenience
   // in practice, you should validate your inputs
-  const data = {
+  const credentials = {
     email: formData.get('email') as string,
     password: formData.get('password') as string,
   }
 
-  const { error } = await supabase.auth.signInWithPassword(data)
+  const { error, data } = await supabase.auth.signInWithPassword(credentials)
 
   if (error) {
-    redirect('/error')
-  }
+    return { 
+      status: error?.message,
+      use: null
+      }
+  } 
 
-  revalidatePath('/', 'layout')
-  redirect('/')
+  const {data: existingUser} = await supabase
+    .from("user_profiles")
+    .select('*')
+    .eq('email', credentials?.email)
+    .limit(1)
+    .single()
+
+    if (!existingUser) {
+        const { error: insertError } = await supabase.from("user_profiles").insert({
+            email: data?.user.email,
+            username: data?.user?.user_metadata?.username,
+
+        })
+
+        if (insertError) {
+            return ({
+                status: insertError?.message,
+                user: null
+            })
+        }
+    }
+
+
+
+  revalidatePath("/", "layout");
+  return {status: 'success', user: credentials.email}
 }
 
 export async function signup(formData: FormData) {
@@ -43,8 +69,6 @@ export async function signup(formData: FormData) {
       return { error: "Username is required and must be a string" };
     }
   
-    // type-casting here for convenience
-    // in practice, you should validate your inputs
     const data = {
       email: email as string,
       password: password as string,
@@ -67,4 +91,18 @@ export async function signup(formData: FormData) {
   
     revalidatePath("/", "layout");
     return {status: 'success', user: data.email}
-  }
+}
+
+export async function signout() {
+    const supabase = await createClient();
+  
+    const { error } = await supabase.auth.signOut();
+  
+    if (error) {
+      redirect("/error")
+    } 
+  
+    revalidatePath("/", "layout");
+    redirect('/login')
+}
+

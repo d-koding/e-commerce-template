@@ -29,7 +29,7 @@ const Navicons = () => {
         <UserIcon />
       </button>
         {isProfileOpen && (
-            <div className="absolute p-4 rounded-md top-12 left-0 text-sm shadow-[0_0pc_10px_rgb(0,0,0,0.2)] z-20">
+            <div className="absolute p-4 rounded-md top-12 left-0 bg-white text-sm shadow-[0_0pc_10px_rgb(0,0,0,0.2)] z-20">
             <Link href="/">Profile</Link>
             <div className="mt-2 cursor-pointer">Logout</div>
             </div>

@@ -7,6 +7,7 @@ import Link from 'next/link'
 export default function LoginPage() {
   const router = useRouter()
   const [loading, setLoading] = useState(false)
+  const [error, setError] = useState<string | null>(null);
  
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault()
@@ -16,7 +17,15 @@ export default function LoginPage() {
     
     const result = await login(formData);
 
+    if (result.status === 'success') {
+      router.push('/')
+    } else {
+      setError(result.status)
+    }
+
     setLoading(false)
+
+
  
   }
  
