@@ -1,14 +1,11 @@
 // app/register/page.js
 "use client";
 import { useState, FormEvent } from "react";
-import { forgotPassword, signup } from "@/actions/auth";
-import { useRouter } from "next/navigation";
+import { forgotPassword } from "@/actions/auth";
 
 export default function ForgotPassword() {
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState<boolean>(false);
-  const router = useRouter();
-
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     setLoading(true);

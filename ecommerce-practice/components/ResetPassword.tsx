@@ -1,7 +1,7 @@
 // app/register/page.js
 "use client";
 import { useState, FormEvent } from "react";
-import { forgotPassword, resetPassword, signup } from "@/actions/auth";
+import { resetPassword } from "@/actions/auth";
 import { useRouter, useSearchParams } from "next/navigation";
 
 export default function ResetPassword() {

@@ -2,17 +2,13 @@
 import React, { useState } from 'react';
 import { UserIcon, BellIcon, ShoppingCartIcon } from '@heroicons/react/24/outline';
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
 import CartModal from './CartModal';
 import Logout from './Logout';
 
 const Navicons = () => {
     const [isProfileOpen, setIsProfileOpen] = useState(false)
     const [isCartOpen, setIsCartOpen] = useState(false)
-    const router = useRouter()
 
-    //Temporary
-    //const isLoggedIn = false
 
     const handleProfile = () => {
         setIsProfileOpen((prev) => !prev)

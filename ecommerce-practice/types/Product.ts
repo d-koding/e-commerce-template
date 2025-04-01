@@ -1,7 +1,7 @@
 export interface Product {
     id: string; // UUID as string in TypeScript
     name: string;
-    price: number; // Numeric in DB, number in TS (convert as needed)
+    price: number; // Numeric in DB, number in TS
     description?: string | null; // Nullable in DB
     image: string;
     hoverImage?: string | null; // Nullable in DB
@@ -9,4 +9,3 @@ export interface Product {
     popularity?: number | null; // Nullable in DB
   }
 
-  

@@ -2,8 +2,20 @@ import React from 'react'
 import Image from 'next/image'
 import Filter from '@/components/Filter'
 import ProductList from '@/components/ProductList'
+import { createClient } from '@/utils/supabase/server/createClient'
 
-const ListPage = () => {
+const ListPage = async () => {
+  const supabase = await createClient();
+  
+  const { data: products, error: error } = await supabase
+    .from('products')
+    .select('*')
+    .order('popularity', { ascending: false })
+  
+    if (error) {
+      console.error('Error fetching products:', error);
+    }
+  
   return (
     <div className='px-4 md:px-8 lg:px-16 xl:32 2xl:px-64 relative'>
         {/* CAMPAIGN */}
@@ -21,7 +33,7 @@ const ListPage = () => {
         <Filter/>
         {/* PRODUCTS */}
         <h1 className='mt-12 text-xl font-semibold'>Shoes For You!</h1>
-        <ProductList/>
+        <ProductList products={products || []}/>
     </div>
   )
 }

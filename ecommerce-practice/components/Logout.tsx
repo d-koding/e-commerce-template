@@ -21,7 +21,8 @@ const Logout = () => {
         if (result.status === 'success') {
             router.push('/login');
           } else {
-            setError(result.status || 'Logout failed');
+            setError(result.status);
+            console.log(error)
           }
         
         setLoading(false)
