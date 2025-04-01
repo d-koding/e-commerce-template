@@ -3,6 +3,7 @@
 import { revalidatePath } from 'next/cache'
 import { createClient } from '@/utils/supabase/server/createClient'
 import { redirect } from 'next/navigation'
+import { headers } from 'next/headers'
 
 export async function login(formData: FormData) {
   const supabase = await createClient()
@@ -84,7 +85,7 @@ export async function signup(formData: FormData) {
     if (error) {
       return { 
         status: error?.message,
-        use: null
+        user: null
 
         }
     } 
@@ -99,10 +100,85 @@ export async function signout() {
     const { error } = await supabase.auth.signOut();
   
     if (error) {
-      redirect("/error")
-    } 
+        return { 
+          status: error?.message,
+          user: null
   
-    revalidatePath("/", "layout");
-    redirect('/login')
+          }
+      } 
+    
+      revalidatePath("/", "layout");
+      return {status: 'success'}
 }
 
+export async function getUserSession() {
+    const supabase = await createClient()
+
+    const { data, error } = await supabase.auth.getUser()
+
+    if (error) {
+        return null
+    } else {
+        return {status: 'success', user: data?.user}
+    }
+}
+
+export async function signInWithGithub() {
+    const origin = (await headers()).get("origin")
+    const supabase = await createClient()
+
+    const { data, error } = await supabase.auth.signInWithOAuth({
+        provider: 'github',
+        options: {
+            redirectTo: `${origin}/auth/callback`
+        }
+    })
+
+    if (error) {
+        redirect('/error')
+    } else if (data.url) {
+        return redirect(data.url)
+    }
+
+
+}
+
+export async function forgotPassword(formData: FormData) {
+    const supabase = await createClient()
+    const origin = (await headers()).get('origin')
+
+    const { error, data } = await supabase.auth.resetPasswordForEmail(
+        formData.get("email") as string,
+        {
+            redirectTo: `${origin}/reset-password`,
+        }
+    )
+
+    if (error) {
+        return {
+            status: error?.message,
+            user: null,
+        }
+    }
+
+    return { status: 'success' }
+}
+
+export async function resetPassword(formData: FormData, code: string) {
+    const supabase = await createClient()
+    const {error: CodeError} = await supabase.auth.exchangeCodeForSession(code)
+
+    if (CodeError) {
+        return { status: CodeError?.message }
+    }
+
+    const { error } = await supabase.auth.updateUser({
+        password: formData.get("new-password") as string,
+    })
+
+    if (error) {
+        return {status: error?.message}
+    }
+
+    return { status: 'success' }
+}
