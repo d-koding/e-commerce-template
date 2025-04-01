@@ -30,7 +30,7 @@ const Navicons = () => {
         
         )}
 
-      {/* Notifications Icon */}
+      {/* Notifications  Icon */}
       <button
         aria-label="Notifications"
         className="h-6 w-6 text-gray-700 hover:text-green-500 md:h-7 md:w-7 relative">
