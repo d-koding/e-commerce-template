@@ -14,7 +14,7 @@ const ProductList = ({ products }: ProductListProps) => {
         products.map((product) => (
           <Link
             key={product.id}
-            href={`/products/${product.id}`}
+            href={`/${product.id}`}
             className="w-full sm:w-1/2 md:w-1/3 lg:w-1/4 flex flex-col gap-4"
           >
             <div className="relative w-full h-80 group">
