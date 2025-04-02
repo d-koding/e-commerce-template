@@ -1,19 +1,28 @@
-import React from 'react'
+import React, { Suspense } from 'react'
 import Image from 'next/image'
 import Filter from '@/components/Filter'
 import ProductList from '@/components/ProductList'
 import { createClient } from '@/utils/supabase/server/createClient'
 
-const ListPage = async () => {
+const ListPage = async ({searchParams}:{ searchParams: { cat?: string; query?: string } }) => {
   const supabase = await createClient();
+
+  const query = (await searchParams).query 
   
-  const { data: products, error: error } = await supabase
-    .from('products')
-    .select('*')
-    .order('popularity', { ascending: false })
+  const { data: products, error } = query
+  ? await supabase
+      .from('products')
+      .select('*')
+      .order('popularity', { ascending: false })
+      .eq('name', query)
+  : await supabase
+      .from('products')
+      .select('*')
+      .order('popularity', { ascending: false });
   
     if (error) {
-      console.error('Error fetching products:', error);
+      console.error('Error fetching products:', error.message);
+      return <p className='text-primary'>Failed to load products.</p>
     }
   
   return (
@@ -26,14 +35,16 @@ const ListPage = async () => {
             <button className='rounded-3xl bg-primary text-white w-max py-3 px-5 text-sm'>Buy Now</button>
             </div>
             <div className='relative w-1/3'>
-                <Image src="" alt="" fill className="object-contain"/>
+                {/* <Image src={null} alt="" fill className="object-contain"/> */}
             </div>
         </div>
         {/* FILTER */}
         <Filter/>
         {/* PRODUCTS */}
         <h1 className='mt-12 text-xl font-semibold'>Shoes For You!</h1>
-        <ProductList products={products || []}/>
+        <Suspense fallback='loading...'>
+          <ProductList products={products || []}/>
+        </Suspense>
     </div>
   )
 }
