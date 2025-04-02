@@ -25,8 +25,9 @@ const Filter = () => {
 
             <select name='type' className='py-2 px-4 rounded-2xl text-xs font-medium bg-gray-200'>
                 <option>Size</option>
-                <option value="physical">Physical</option>
-                <option value="digital">Digital</option>
+                <option value="physical">Small</option>
+                <option value="digital">Medium</option>
+                <option value="digital">Large</option>
             </select>
 
             <select name='type' className='py-2 px-4 rounded-2xl text-xs font-medium bg-gray-200'>
@@ -37,8 +38,9 @@ const Filter = () => {
 
             <select name='type' className='py-2 px-4 rounded-2xl text-xs font-medium bg-gray-200'>
                 <option>Company</option>
-                <option value="physical">Physical</option>
-                <option value="digital">Digital</option>
+                <option value="physical">Company 1</option>
+                <option value="digital">Company 2</option>
+                <option value="digital">Company 3</option>
             </select>
 
             <select name='type' className='py-2 px-4 rounded-2xl text-xs font-medium bg-gray-200'>

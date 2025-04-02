@@ -1,5 +1,4 @@
 import React, { Suspense } from 'react'
-import Image from 'next/image'
 import Filter from '@/components/Filter'
 import ProductList from '@/components/ProductList'
 import { createClient } from '@/utils/supabase/server/createClient'
