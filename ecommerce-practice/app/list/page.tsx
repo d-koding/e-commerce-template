@@ -3,7 +3,11 @@ import Filter from '@/components/Filter'
 import ProductList from '@/components/ProductList'
 import { createClient } from '@/utils/supabase/server/createClient'
 
-const ListPage = async ({searchParams}:{ searchParams: { cat?: string; query?: string } }) => {
+type PageProps = {
+  searchParams: Promise<{ query?: string }>;
+};
+
+const ListPage = async ({ searchParams }: PageProps) => {
   const supabase = await createClient();
 
   const query = (await searchParams).query 
