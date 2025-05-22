@@ -1,11 +1,17 @@
-export interface Product {
-    id: string; // UUID as string in TypeScript
-    name: string;
-    price: number; // Numeric in DB, number in TS
-    description?: string | null; // Nullable in DB
-    image: string;
-    hoverImage?: string | null; // Nullable in DB
-    created_at: string; // Timestamp as ISO string in TS
-    popularity?: number | null; // Nullable in DB
-  }
+// @/types/Product.ts
+export interface MediaItem {
+  url: string;
+  type?: string;
+  order?: number;
+}
 
+export interface Product {
+  id: string;
+  name: string;
+  price: number;
+  description: string;
+  popularity: number;
+  created_at?: string;
+  media: MediaItem[] | null;
+  slug: string;
+}

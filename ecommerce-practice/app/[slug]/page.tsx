@@ -3,23 +3,57 @@ import React from 'react'
 import { Metadata } from 'next'
 import CustomizeProducts from '@/components/CustomizeProducts'
 import Add from '@/components/Add'
+import { createClient } from "@/utils/supabase/server/createClient"
+import { notFound } from 'next/navigation'
 
 export const metadata: Metadata = {
-    title: "Shop"
-}
-const SinglePage = () => {
+  title: "Shop"
+};
+
+const SinglePage = async ({ params }: { params: Promise<{ slug: string }> }) => {
+  const { slug } = await params;
+  console.log("Slug from params:", slug);
+
+  const supabase = await createClient();
+
+  const { data: productData, error } = await supabase
+    .from('products')
+    .select(`
+      *,
+      media (
+        url,
+        type,
+        order
+      )
+    `)
+    .eq('slug', slug)
+    .single();
+
+  if (error) {
+    console.error("Supabase query error:", error.message);
+    return notFound();
+  }
+
+  const product = productData;
+  if (!product) {
+    console.log("No product found for slug:", slug);
+    return notFound();
+  }
+
+  const mediaItems = product.media || [];
+
   return (
     <div className='px-4 md:px-8 lg:px-16 xl:px-32 2xl:px-64 relative flex flex-col lg:flex-row gap-16'>
     {/* IMG */}
         <div className='w-full lg:w-1/2 lg:sticky top-20 h-max'>
-            <ProductImages/>
+            <ProductImages items={mediaItems} />
         </div>
 
     {/* TEXTS */}
         <div className='w-full lg:w-1/2 flex flex-col gap-6'>
-            <h1 className='text-4xl font-medium'>Product name</h1>
+            <h1 className='text-4xl font-medium'>{product.name}</h1>
             <p className='text-gray-500'>
-                INFO
+                {product.description}
             </p>
             <div className='h-[2px] bg-gray-100'/>
             <div className='flex items-center gap-4'>
